@@ -5,14 +5,15 @@
 
 ## Quick Start
 
-Clone this repo into your project's `.claude/` directory, or copy the `commands/` folder:
+Skills live in `commands/` at the repo root. Claude Code expects them at `.claude/commands/` in your project.
 
 ```bash
-# Option 1: clone as .claude folder in your project
-git clone https://github.com/vasya-boop/Claude-Medical-Skills.git /your-project/.claude
+# Option 1: clone directly as .claude (commands/ lands at .claude/commands/)
+git clone https://github.com/vasya-boop/Claude-Medical-Skills.git .claude
 
-# Option 2: copy just the commands
-cp -r .claude/commands/ /your-project/.claude/commands/
+# Option 2: copy just the commands folder
+git clone https://github.com/vasya-boop/Claude-Medical-Skills.git /tmp/medical-skills
+cp -r /tmp/medical-skills/commands/ .claude/commands/
 ```
 
 Then in Claude Code, invoke any skill:
