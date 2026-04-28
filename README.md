@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/freedomintelligence-openclaw-medical-skills-badge.png)](https://mseep.ai/app/freedomintelligence-openclaw-medical-skills)
+
 # OpenClaw Medical Skills
 
 <div align="center">
