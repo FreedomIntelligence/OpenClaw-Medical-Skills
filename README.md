@@ -253,6 +253,7 @@ Your agent should list the installed skills with their capabilities.
 
 ## Skills List
 
+- [Skill Hub](https://skill.442595.xyz/) — 5800+ curated AI Agent Skills for Claude Code, Codex, Cursor, Hermes & more across 22 categories.
 ## 🧰 General & Core
 
 <details open>
