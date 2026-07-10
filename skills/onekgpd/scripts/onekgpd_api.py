@@ -1,6 +1,6 @@
 # /// script
-# requires-python = ">=3.12"
-# dependencies = ["dnaerys>=0.2.0,<0.3.0"]
+# requires-python = ">=3.11"
+# dependencies = ["dnaerys>=0.2.1,<0.3.0"]
 # ///
 """OneKGPd — individual-level queries over the 1000 Genomes Project.
 
