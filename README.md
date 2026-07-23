@@ -166,13 +166,13 @@ Your agent should list the installed skills with their capabilities.
 |---|---|---|
 | General & Core | 10 | Browser/search, document tools, and developer workflow utilities |
 | Medical & Clinical | 119 | Clinical reports, CDS, oncology, imaging, and healthcare AI |
-| Scientific Databases | 43 | Genomics/protein/drug databases and biomedical knowledge retrieval |
+| Scientific Databases | 44 | Genomics/protein/drug databases and biomedical knowledge retrieval |
 | Bioinformatics (gptomics) | 239 | Variant analysis, sequencing QC, DE, pathways, single-cell, and epigenomics |
 | Omics & Computational Biology | 59 | Single-cell/spatial, proteomics, cheminformatics, and protein design tools |
 | ClawBio Pipelines | 21 | Orchestration pipelines for scRNA, GWAS, ancestry, and structural workflows |
 | BioOS Extended Suite | 285 | Extended agent suite for oncology, immunology, clinical AI, and infrastructure |
 | Data Science & Tools | 93 | Statistics, visualization, automation, simulation, and scientific tooling |
-| **Total** | **869** | |
+| **Total** | **870** | |
 
 ---
 
@@ -493,6 +493,7 @@ Your agent should list the installed skills with their capabilities.
 | [cosmic-database](skills/cosmic-database/) | Access COSMIC cancer mutation database. Query somatic mutations, Cancer Gene Census, mutational signatures, gene fusions, for cancer research and precision oncology. Requires authentication. |
 | [ensembl-database](skills/ensembl-database/) | Query Ensembl genome database REST API for 250+ species. Gene lookups, sequence retrieval, variant analysis, comparative genomics, orthologs, VEP predictions, for genomic research. |
 | [gene-database](skills/gene-database/) | Query NCBI Gene via E-utilities/Datasets API. Search by symbol/ID, retrieve gene info (RefSeqs, GO, locations, phenotypes), batch lookups, for gene annotation and functional analysis. |
+| [genomic-intelligence](skills/genomic-intelligence/) | Predict regulatory features, gene structure, and expression directly from DNA sequence with Genomic Intelligence's hosted transformer DNA models (no local GPU). Six tasks over a REST API and a keyless MCP server: promoter regions, splice sites, enhancer activity, chromatin state, expression (log TPM), and de-novo gene annotation. |
 | [geo-database](skills/geo-database/) | Access NCBI GEO for gene expression/genomics data. Search/download microarray and RNA-seq datasets (GSE, GSM, GPL), retrieve SOFT/Matrix files, for transcriptomics and expression analysis. |
 | [ena-database](skills/ena-database/) | Access European Nucleotide Archive via API/FTP. Retrieve DNA/RNA sequences, raw reads (FASTQ), genome assemblies by accession, for genomics and bioinformatics pipelines. |
 | [gget](skills/gget/) | CLI/Python toolkit for rapid bioinformatics queries with access to 20+ databases: Ensembl, UniProt, AlphaFold, ARCHS4, Enrichr, OpenTargets, COSMIC, BLAST, and more. |
