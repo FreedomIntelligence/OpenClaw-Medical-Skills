@@ -1736,6 +1736,7 @@ Your agent should list the installed skills with their capabilities.
 | Skill | Description |
 |-------|-------------|
 | [bgpt-paper-search](skills/bgpt-paper-search/) | Search scientific papers with BGPT MCP server. Returns 25+ structured fields per paper: methods, results, sample sizes, quality scores. For literature reviews and evidence synthesis. |
+| [paperzilla (external)](https://github.com/paperzilla-ai/paperzilla-skills) | Conversational literature monitoring and paper chat for biology and medical research. Tracks project-specific bioRxiv and medRxiv feeds today, fetches paper markdown for summaries and relevance checks, and has PubMed support planned. Also available on [ClawHub](https://clawhub.ai/pors/paperzilla). |
 | [pyzotero](skills/pyzotero/) | Interact with Zotero reference libraries programmatically via Zotero Web API v3. Retrieve, create, update items, export citations, upload PDFs, and build research automation workflows. |
 | [open-notebook](skills/open-notebook/) | Self-hosted NotebookLM alternative. Ingest PDFs, videos, web pages, documents; generate AI-powered notes; chat with research materials; supports 16+ AI providers. |
 
