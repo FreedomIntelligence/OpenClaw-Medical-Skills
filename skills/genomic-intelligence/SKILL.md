@@ -320,23 +320,20 @@ composite:
 `model_loading`, `service_unavailable`, `http_error`, `unknown`); treat an
 unlisted value as a generic failure, not a parse error.
 
-**Branch on `code`, never on `details` or `loc`.** `details` is documented as
-keyed on the sibling `code`, but a validation failure currently arrives as a bare
-FastAPI error *array* (`[{loc, msg, type}, …]`) rather than the `{errors: […]}`
-object the schema declares — read it defensively and keep control flow off it.
+**Branch on `code`, never on `details` or `loc`.** `details` is keyed on the
+sibling `code`; a validation failure carries the declared `{errors: [{loc, msg,
+type}, …]}` object — read it defensively and keep control flow off it.
 
-`error.request_id` mirrors the `X-Request-Id` header. The header is set on every
-response; the body field is not — `413 sync_too_large` omits it — so fall back to
-the header.
+`error.request_id` mirrors the `X-Request-Id` header, and both are set on every
+response; success envelopes carry `meta.request_id`.
 Every response carries `RateLimit-Limit`, `RateLimit-Remaining`,
 `RateLimit-Reset`, `RateLimit-Policy`; a `429` adds `Retry-After`.
 
-> Schema-version note: this describes the contract served from `2026.08.19.4`.
-> `api.genomicintelligence.ai` may still be on `2026.08.18.1` until that build is
-> promoted, where the six literal operations, the typed `options`, the per-task
-> floors, the published composite, the `Prefer` parameter, the `code` enum and the
-> new `bio_spec` fields are not yet present. URLs and envelopes are the same
-> either way — check `info.version` in `/v1/openapi.json`.
+> Schema-version note: this describes gpu_service `2026.08.19.5`, live on
+> `api.genomicintelligence.ai` — the six literal operations, the typed `options`,
+> the per-task floors, the published composite, the `Prefer` parameter, the `code`
+> enum and the `bio_spec` fields are all present. Check `info.version` in
+> `/v1/openapi.json` if a detail here does not match.
 
 ## Reference files
 
