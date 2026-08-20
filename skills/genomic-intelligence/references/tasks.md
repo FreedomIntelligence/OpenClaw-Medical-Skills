@@ -77,6 +77,14 @@ Splice **donor** and **acceptor** sites. `data.sites` lists each with `name`,
 `start`, `end`, `site_type` (donor/acceptor), `score`, `strand`. The default is a
 BigBird long-context model.
 
+**Strand-specific — and the wrong strand fails silently.** Submit transcript
+orientation (reverse-complement minus-strand genes). A reverse-complemented
+sequence does *not* return zeros or an empty result: measured live, it returns
+plausible sites at different positions, often still at high confidence, and site
+counts can hold or collapse depending on the locus. **Neither the score nor the
+count tells you the orientation was wrong**, so there is no post-hoc check —
+get the orientation right on input.
+
 ## enhancer
 Enhancer activity. The default (DeepSTARR) reports **developmental**
 and **housekeeping** scores — `summary.dev_score_max` / `summary.hk_score_max`
