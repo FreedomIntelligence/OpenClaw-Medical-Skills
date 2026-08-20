@@ -18,8 +18,9 @@ key from the environment (or a `.env` via `python-dotenv`); never hardcode or
 commit it.
 
 > The hosted **MCP** server (`mcp.genomicintelligence.ai/mcp`) is different: it
-> runs **keyless** against a capped public demo quota, with the key optional for
-> a higher quota. Only the **REST** path strictly requires a key. See `mcp.md`.
+> runs **keyless** against a rate- and concurrency-limited public demo tier, with
+> the key optional for higher limits. Only the **REST** path strictly requires a
+> key. See `mcp.md`.
 
 ## Endpoints
 
@@ -74,16 +75,15 @@ length — under the floor *or* over 500,000 bp; over-length is not a `413`).
 
 - `request_max_bp` — the enforced ceiling: 500,000 for every model.
 - `context_window_bp` — the model's own sliding window; `null` for annotation and
-  expression. Live: promoter `g0-promoter-2000bp` 2,000 (300 bp promoter models
-  300), splice 15,000, enhancer 249, chromatin 1,000. Compare your sequence length
-  against this to know whether the model scored real sequence or padding.
-- `trained_window_bp` — fixed receptive field; 9,198 for `g0-expression`, `null`
-  for sliding-window models.
-- The legacy `max_seq_length_bp` was retired from `bio_spec` in gpu_service
-  `2026.08.19.5` and is absent from the live response. It was ambiguous — it read
-  9,198 for `g0-expression`, the trained window rather than a request cap, so
-  gating on it wrongly rejected the 9,198–500,000 bp range expression accepts.
-  Use `request_max_bp`.
+  expression. Promoter 2,000 (the 300 bp promoter models 300), splice 15,000,
+  enhancer 249, chromatin 1,000. Compare your sequence length against this to
+  know whether the model scored real sequence or padding.
+- `trained_window_bp` — fixed receptive field; 9,198 for the expression model,
+  `null` for sliding-window models.
+- The legacy `max_seq_length_bp` is not part of `bio_spec` and is absent from the
+  response. It was ambiguous — it read 9,198 for the expression model, the trained
+  window rather than a request cap, so gating on it wrongly rejected the
+  9,198–500,000 bp range expression accepts. Use `request_max_bp`.
 
 There is no `strand_sensitive` flag. The splice model is strand-specific in
 practice — feed transcript orientation.

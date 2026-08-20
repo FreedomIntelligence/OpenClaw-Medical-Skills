@@ -32,18 +32,19 @@ Use GI when the user has DNA and wants a model prediction:
 Not for local alignment, variant calling, or file I/O — use a local tool
 (BioPython, bcftools) for those. GI is for **model inference from sequence**.
 
-> For research and development use, **not clinical or diagnostic decisions**.
+> Research and development use. Not for clinical or diagnostic decisions.
 
 ## Two ways to call GI
 
-### Hosted MCP server (best for AI agents — keyless)
+### Hosted MCP server (keyless; preferred on MCP hosts)
 
 GI hosts an MCP server at `https://mcp.genomicintelligence.ai/mcp` (Streamable
 HTTP). When your agent host supports MCP, prefer it: it works **keyless** against
-a capped public demo quota (zero setup), and an optional `gi_` bearer key raises
-the quota. It exposes acquisition tools that return a **sequence handle**
-(`sequence_ref`) and `predict_*` tools that take that handle — so large sequences
-never bloat the context. See [MCP workflow](#mcp-workflow-handle-based) and
+a rate- and concurrency-limited public demo tier, and an optional `gi_` bearer
+key raises those limits.
+It exposes acquisition tools that return a **sequence handle** (`sequence_ref`)
+and `predict_*` tools that take that handle, so large sequences stay out of the
+context. See [MCP workflow](#mcp-workflow-handle-based) and
 `references/mcp.md`.
 
 ### REST API (universal)
@@ -93,7 +94,7 @@ options?}`, returning a `{data, meta}` envelope. What differs per task:
 **The minimum is admission control, not regime.** A request above the floor but
 shorter than the selected model's `bio_spec.context_window_bp` is *accepted and
 scored* — against a window padded out to the context window. Enhancer is the
-sharp case: the bound is 50 bp (DeepSTARR's gate) but the context window is
+sharp case: the floor is 50 bp while the context window is
 249 bp, so 50–248 bp is scored mostly on padding. Compare your length against
 `context_window_bp` from `GET /v1/tasks/{task}/models` to know whether the model
 saw real sequence. Longer-than-context input is fine — the scanner steps a
@@ -118,7 +119,7 @@ never ignored:
 | expression | `description` — **required**, and the only key |
 
 `Prefer: respond-async` is a declared header on **all six** predict operations
-and on the composite, not just `annotation` — see [Async](#async-any-task-annotation-always).
+and on the composite, not just `annotation` — see [Async](#async-any-task).
 
 **Omit `model` and the API uses the task's default** — that is the recommended
 call. Default model IDs are intentionally **not** documented here: defaults
@@ -147,7 +148,7 @@ or query parameter:
   is required, and is the **only** key `expression` accepts inside `options`.
   Unknown top-level body fields are rejected too.
 
-> Gotcha: the legal `tss_index` range is wide, so an offset that is merely
+> Note: the legal `tss_index` range is wide, so an offset that is merely
 > *wrong* (counted over raw FASTA characters including newlines, or relative to
 > a locus start rather than the submitted slice) does not error — it returns a
 > confident `200` for the wrong window. Assert on
@@ -178,7 +179,7 @@ You rarely start from a raw 9,198 bp string. Acquire sequence first:
   for REST. (`load_local_fasta` exists only in local deployments, not on the
   hosted server.)
 - **A demo sequence** → MCP `load_demo_sequence(name=...)` returns a ready handle
-  (great for a keyless smoke test); `name` is required.
+  for a keyless smoke test; `name` is required.
 
 See `references/sequence-acquisition.md` for the exact Ensembl calls and the
 expression-window math.
@@ -223,14 +224,14 @@ out = predict("expression", locus_seq, "HBB",
 print(out["meta"]["task_specific_counts"]["scored_window"])   # confirm the window scored
 ```
 
-### Async (any task; annotation always)
+### Async (any task)
 
 `Prefer: respond-async` is a declared header parameter on all six predict
 operations and on the composite. A `202` carries the same `{data, meta}` envelope
 as a sync `200`, with `data = {job_id, status: "accepted", links}`; the job id is
 also in the `Content-Location` and `X-Job-Id` response headers. Async is
 JSON-only — combining it with a text `format` is rejected. `annotation` is the
-task that needs it:
+task that most often needs it:
 
 ```python
 import time
@@ -257,7 +258,7 @@ the context:
 
 ```
 # 1. Acquire a sequence handle (each returns a sequence_ref):
-load_demo_sequence(name="promoter_tp53")  # keyless smoke test; `name` is REQUIRED
+load_demo_sequence(name="promoter_tp53")  # keyless smoke test; name is required
 fetch_ensembl_sequence(gene="TP53")       # gene symbol or Ensembl ID -> handle
 fetch_region(region="chr11:5,225,000-5,235,000")   # coordinates -> handle
 fetch_gene_for_expression(gene="HBB")     # TSS-centred 9,198 bp handle for expression
@@ -329,11 +330,11 @@ response; success envelopes carry `meta.request_id`.
 Every response carries `RateLimit-Limit`, `RateLimit-Remaining`,
 `RateLimit-Reset`, `RateLimit-Policy`; a `429` adds `Retry-After`.
 
-> Schema-version note: this describes gpu_service `2026.08.19.5`, live on
-> `api.genomicintelligence.ai` — the six literal operations, the typed `options`,
-> the per-task floors, the published composite, the `Prefer` parameter, the `code`
-> enum and the `bio_spec` fields are all present. Check `info.version` in
-> `/v1/openapi.json` if a detail here does not match.
+> The Genomic Intelligence API publishes the six literal predict operations, the
+> typed `options` objects, the per-task floors, the composite workflow, the
+> `Prefer` parameter, the `code` enum and the `bio_spec` fields described above.
+> The served schema at <https://api.genomicintelligence.ai/v1/openapi.json> is the
+> authority; read it if a detail here does not match.
 
 ## Reference files
 
