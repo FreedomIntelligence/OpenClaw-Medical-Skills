@@ -77,6 +77,13 @@ Splice **donor** and **acceptor** sites. `data.sites` lists each with `name`,
 `start`, `end`, `site_type` (donor/acceptor), `score`, `strand`. The default is a
 BigBird long-context model.
 
+**`start`/`end` is a token span, not the junction base.** It bounds one
+variable-width tokenizer token — 4–10 bp across the sequences measured so far —
+reported with a `token_index`, and the exon/intron junction lies somewhere
+inside it. Do not derive a base position from the pair, and do not intersect it
+against reference annotation as though it were a boundary; the same span is what
+lands in GFF3 columns 4–5 of the `gff3` output.
+
 **Strand-specific — and the wrong strand fails silently.** Submit transcript
 orientation (reverse-complement minus-strand genes). A reverse-complemented
 sequence does *not* return zeros or an empty result: measured live, it returns
