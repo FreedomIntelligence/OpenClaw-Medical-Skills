@@ -5,13 +5,13 @@
 [![GitHub Stars](https://img.shields.io/github/stars/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github&color=gold)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github&color=blue)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/network/members)
 [![GitHub Issues](https://img.shields.io/github/issues/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/issues)
-[![技能数量](https://img.shields.io/badge/技能数量-869-brightgreen?style=for-the-badge)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/tree/main/skills)
+[![技能数量](https://img.shields.io/badge/技能数量-870-brightgreen?style=for-the-badge)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/tree/main/skills)
 [![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/平台-OpenClaw%20%7C%20NanoClaw-orange?style=for-the-badge)](https://github.com/openclaw/openclaw)
 
 **最大的开源医疗 AI 技能库，专为 OpenClaw 框架设计。**
 
-*869 个精选技能 · 临床医学 · 基因组学 · 药物发现 · 生物信息学 · 医疗器械*
+*870 个精选技能 · 临床医学 · 基因组学 · 药物发现 · 生物信息学 · 医疗器械*
 
 [English](README.md) | [中文](#)
 
@@ -21,7 +21,7 @@
 
 ## 项目简介
 
-**OpenClaw Medical Skills** 是一个包含 **869 个 AI Agent 技能**的精选集合，覆盖生物医学与临床研究的完整领域。这些技能专为 [OpenClaw](https://github.com/openclaw/openclaw) / [NanoClaw](https://github.com/qwibitai/nanoclaw) —— 基于 Claude 的个人 AI 助手框架 —— 设计，能将通用 AI 智能体转变为强大的医学与科研研究伙伴。
+**OpenClaw Medical Skills** 是一个包含 **870 个 AI Agent 技能**的精选集合，覆盖生物医学与临床研究的完整领域。这些技能专为 [OpenClaw](https://github.com/openclaw/openclaw) / [NanoClaw](https://github.com/qwibitai/nanoclaw) —— 基于 Claude 的个人 AI 助手框架 —— 设计，能将通用 AI 智能体转变为强大的医学与科研研究伙伴。
 
 每个技能都是一个独立模块（`SKILL.md` 文件），它：
 - 为 Agent 注入专业领域知识与工作流
@@ -155,13 +155,13 @@ Agent 应当列出已安装的技能及其功能说明。
 |---|---|---|
 | 通用与核心 | 10 | 浏览器/搜索、文档处理与开发工作流工具 |
 | 医疗与临床 | 119 | 临床报告、决策支持、肿瘤学、影像与医疗 AI |
-| 科学数据库 | 43 | 基因组/蛋白/药物数据库与生物医学检索 |
+| 科学数据库 | 44 | 基因组/蛋白/药物数据库与生物医学检索 |
 | 生物信息学 (gptomics bio-* 套件) | 239 | 变异分析、测序质控、差异表达、通路与单细胞分析 |
 | 组学与计算生物学 | 59 | 单细胞/空间组学、蛋白质组、化学信息学与蛋白设计 |
 | ClawBio 管道 | 21 | 面向 scRNA、GWAS、祖先分析与结构生物学的编排流程 |
 | BioOS 扩展套件 | 285 | 覆盖肿瘤、免疫、临床 AI 与研究基础设施的扩展智能体 |
 | 数据科学与工具 | 93 | 统计、可视化、自动化、模拟与科研工具链 |
-| **总计** | **869** | |
+| **总计** | **870** | |
 
 ---
 
@@ -482,6 +482,7 @@ Agent 应当列出已安装的技能及其功能说明。
 | [cosmic-database](skills/cosmic-database/) | 访问 COSMIC 癌症突变数据库。查询体细胞突变、癌症基因普查、突变特征、基因融合，用于癌症研究和精准肿瘤学。需要认证。 |
 | [ensembl-database](skills/ensembl-database/) | 查询 Ensembl 基因组数据库 REST API（250+ 物种）。基因查询、序列检索、变异分析、比较基因组学、直系同源基因、VEP 预测。 |
 | [gene-database](skills/gene-database/) | 通过 E-utilities/Datasets API 查询 NCBI Gene。按符号/ID 检索，获取基因信息（RefSeq、GO、位置、表型），批量查询，用于基因注释。 |
+| [genomic-intelligence](skills/genomic-intelligence/) | 直接从 DNA 序列预测调控元件、基因结构与表达量，基于 Genomic Intelligence 托管的 Transformer DNA 模型（无需本地 GPU）。涵盖启动子、剪接位点、增强子活性、染色质状态、表达量（log TPM）与从头基因注释六项任务，提供 REST API 与免密钥 MCP 服务。 |
 | [geo-database](skills/geo-database/) | 访问 NCBI GEO 基因表达/基因组数据。搜索/下载微阵列和 RNA-seq 数据集（GSE、GSM、GPL），检索 SOFT/Matrix 文件，用于转录组分析。 |
 | [ena-database](skills/ena-database/) | 通过 API/FTP 访问欧洲核酸数据库。按登录号检索 DNA/RNA 序列、原始测序数据（FASTQ）、基因组组装，用于基因组学和生物信息学流程。 |
 | [gget](skills/gget/) | 快速生物信息查询的 CLI/Python 工具包，访问 20+ 数据库：Ensembl、UniProt、AlphaFold、ARCHS4、Enrichr、OpenTargets、COSMIC、BLAST 等。 |
