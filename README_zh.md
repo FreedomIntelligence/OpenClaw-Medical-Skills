@@ -5,13 +5,13 @@
 [![GitHub Stars](https://img.shields.io/github/stars/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github&color=gold)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github&color=blue)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/network/members)
 [![GitHub Issues](https://img.shields.io/github/issues/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/issues)
-[![技能数量](https://img.shields.io/badge/技能数量-869-brightgreen?style=for-the-badge)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/tree/main/skills)
+[![技能数量](https://img.shields.io/badge/技能数量-870-brightgreen?style=for-the-badge)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/tree/main/skills)
 [![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/平台-OpenClaw%20%7C%20NanoClaw-orange?style=for-the-badge)](https://github.com/openclaw/openclaw)
 
 **最大的开源医疗 AI 技能库，专为 OpenClaw 框架设计。**
 
-*869 个精选技能 · 临床医学 · 基因组学 · 药物发现 · 生物信息学 · 医疗器械*
+*870 个精选技能 · 临床医学 · 基因组学 · 药物发现 · 生物信息学 · 医疗器械*
 
 [English](README.md) | [中文](#)
 
@@ -21,7 +21,7 @@
 
 ## 项目简介
 
-**OpenClaw Medical Skills** 是一个包含 **869 个 AI Agent 技能**的精选集合，覆盖生物医学与临床研究的完整领域。这些技能专为 [OpenClaw](https://github.com/openclaw/openclaw) / [NanoClaw](https://github.com/qwibitai/nanoclaw) —— 基于 Claude 的个人 AI 助手框架 —— 设计，能将通用 AI 智能体转变为强大的医学与科研研究伙伴。
+**OpenClaw Medical Skills** 是一个包含 **870 个 AI Agent 技能**的精选集合，覆盖生物医学与临床研究的完整领域。这些技能专为 [OpenClaw](https://github.com/openclaw/openclaw) / [NanoClaw](https://github.com/qwibitai/nanoclaw) —— 基于 Claude 的个人 AI 助手框架 —— 设计，能将通用 AI 智能体转变为强大的医学与科研研究伙伴。
 
 每个技能都是一个独立模块（`SKILL.md` 文件），它：
 - 为 Agent 注入专业领域知识与工作流
@@ -153,7 +153,7 @@ Agent 应当列出已安装的技能及其功能说明。
 
 | 类别 | 数量 | 代表技能 |
 |---|---|---|
-| 通用与核心 | 10 | 浏览器/搜索、文档处理与开发工作流工具 |
+| 通用与核心 | 11 | 浏览器/搜索、文档处理与开发工作流工具 |
 | 医疗与临床 | 119 | 临床报告、决策支持、肿瘤学、影像与医疗 AI |
 | 科学数据库 | 43 | 基因组/蛋白/药物数据库与生物医学检索 |
 | 生物信息学 (gptomics bio-* 套件) | 239 | 变异分析、测序质控、差异表达、通路与单细胞分析 |
@@ -161,7 +161,7 @@ Agent 应当列出已安装的技能及其功能说明。
 | ClawBio 管道 | 21 | 面向 scRNA、GWAS、祖先分析与结构生物学的编排流程 |
 | BioOS 扩展套件 | 285 | 覆盖肿瘤、免疫、临床 AI 与研究基础设施的扩展智能体 |
 | 数据科学与工具 | 93 | 统计、可视化、自动化、模拟与科研工具链 |
-| **总计** | **869** | |
+| **总计** | **870** | |
 
 ---
 
@@ -257,6 +257,7 @@ Agent 应当列出已安装的技能及其功能说明。
 | [agent-browser](skills/agent-browser/) | 浏览器自动化。可用于网页研究、阅读文章、与网页应用交互、填写表单、截图、提取数据、测试网页等。任何需要浏览器的场景均可使用。 |
 | [find-skills](skills/find-skills/) | 帮助用户发现和安装 Agent 技能。当用户询问"如何做 X"、"有没有能做 X 的技能"、"是否有 skill 可以……"或希望扩展 Agent 能力时触发。 |
 | [multi-search-engine](skills/multi-search-engine/) | 多搜索引擎集成，支持 17 个引擎（8 个国内 + 9 个国际）。涵盖百度、Bing、360、搜狗、微信、Google、DuckDuckGo、WolframAlpha 等。支持高级搜索语法、时间过滤、站内搜索，无需 API Key。 |
+| [parallel-search](skills/parallel-search/) | 通过 Parallel Search MCP 搜索公开生物医学资料并抓取网页，无需 Parallel API Key。包含 MCPorter 配置及注重引用核验的研究流程。 |
 | [wikipedia-search](skills/wikipedia-search/) | 通过 MediaWiki API 搜索并获取 Wikipedia 结构化内容，提供可靠的百科全书式信息。支持多语言查询。 |
 | [deep-research](skills/deep-research/) | 自主多步骤深度研究。搜索多个信息来源，阅读全文，综合分析后生成结构化报告。适用于综合调研、文献综述、竞品分析或对某一主题的深度挖掘。 |
 | [pdf](skills/pdf/) | 全功能 PDF 工具包——提取文本和表格、创建新 PDF、合并/拆分文档、填写表单、OCR 扫描件。处理任何 .pdf 文件时使用。 |

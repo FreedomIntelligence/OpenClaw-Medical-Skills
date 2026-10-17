@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "parallel-search": {
+      "baseUrl": "https://search.parallel.ai/mcp",
+      "headers": {
+        "User-Agent": "OpenClaw-Medical-Skills/parallel-search"
+      }
+    }
+  },
+  "imports": []
+}

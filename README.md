@@ -5,13 +5,13 @@
 [![GitHub Stars](https://img.shields.io/github/stars/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github&color=gold)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github&color=blue)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/network/members)
 [![GitHub Issues](https://img.shields.io/github/issues/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/issues)
-[![Skills Count](https://img.shields.io/badge/Skills-869-brightgreen?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/tree/main/skills)
+[![Skills Count](https://img.shields.io/badge/Skills-870-brightgreen?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/tree/main/skills)
 [![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-OpenClaw%20%7C%20NanoClaw-orange?style=for-the-badge)](https://github.com/openclaw/openclaw)
 
 **The largest open-source medical AI skill library for OpenClaw.**
 
-*869 curated skills · Clinical · Genomics · Drug Discovery · Bioinformatics · Medical Devices*
+*870 curated skills · Clinical · Genomics · Drug Discovery · Bioinformatics · Medical Devices*
 
 [English](#) | [中文](README_zh.md)
 
@@ -21,7 +21,7 @@
 
 ## What Is This?
 
-**OpenClaw Medical Skills** is a curated collection of **869 AI agent skills** covering the full spectrum of biomedical and clinical research. These skills are designed for [OpenClaw](https://github.com/openclaw/openclaw) / [NanoClaw](https://github.com/qwibitai/nanoclaw) — Claude-based personal AI assistant frameworks — and transform a general-purpose AI agent into a powerful medical and scientific research companion.
+**OpenClaw Medical Skills** is a curated collection of **870 AI agent skills** covering the full spectrum of biomedical and clinical research. These skills are designed for [OpenClaw](https://github.com/openclaw/openclaw) / [NanoClaw](https://github.com/qwibitai/nanoclaw) — Claude-based personal AI assistant frameworks — and transform a general-purpose AI agent into a powerful medical and scientific research companion.
 
 Each skill is a self-contained module (a `SKILL.md` file) that:
 - Teaches the agent specialized domain knowledge and workflows
@@ -164,7 +164,7 @@ Your agent should list the installed skills with their capabilities.
 
 | Category | Count | Highlights |
 |---|---|---|
-| General & Core | 10 | Browser/search, document tools, and developer workflow utilities |
+| General & Core | 11 | Browser/search, document tools, and developer workflow utilities |
 | Medical & Clinical | 119 | Clinical reports, CDS, oncology, imaging, and healthcare AI |
 | Scientific Databases | 43 | Genomics/protein/drug databases and biomedical knowledge retrieval |
 | Bioinformatics (gptomics) | 239 | Variant analysis, sequencing QC, DE, pathways, single-cell, and epigenomics |
@@ -172,7 +172,7 @@ Your agent should list the installed skills with their capabilities.
 | ClawBio Pipelines | 21 | Orchestration pipelines for scRNA, GWAS, ancestry, and structural workflows |
 | BioOS Extended Suite | 285 | Extended agent suite for oncology, immunology, clinical AI, and infrastructure |
 | Data Science & Tools | 93 | Statistics, visualization, automation, simulation, and scientific tooling |
-| **Total** | **869** | |
+| **Total** | **870** | |
 
 ---
 
@@ -268,6 +268,7 @@ Your agent should list the installed skills with their capabilities.
 | [agent-browser](skills/agent-browser/) | Browse the web for any task — research topics, read articles, interact with web apps, fill forms, take screenshots, extract data, and test web pages. Use whenever a browser would be useful. |
 | [find-skills](skills/find-skills/) | Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. |
 | [multi-search-engine](skills/multi-search-engine/) | Multi search engine integration with 17 engines (8 CN + 9 Global). Supports Baidu, Bing, 360, Sogou, WeChat, Google, DuckDuckGo, WolframAlpha and more. Supports advanced operators, time filters, site search. No API keys required. |
+| [parallel-search](skills/parallel-search/) | Search public biomedical sources and fetch pages through Parallel Search MCP without a Parallel API key. Includes MCPorter setup and a citation-focused research workflow. |
 | [wikipedia-search](skills/wikipedia-search/) | Search and fetch structured content from Wikipedia using the MediaWiki API for reliable, encyclopedic information. Supports multi-language queries. |
 | [deep-research](skills/deep-research/) | Execute autonomous multi-step deep research on any topic. Searches multiple sources, reads full content, synthesizes findings, and produces a structured report. Use for comprehensive research, literature reviews, competitive analysis, or topic deep-dives. |
 | [pdf](skills/pdf/) | Comprehensive PDF toolkit — extract text and tables, create new PDFs, merge/split documents, handle forms, OCR scanned PDFs. Use when working with any .pdf file. |
