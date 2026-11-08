@@ -115,7 +115,7 @@ never ignored:
 | splice | `threshold` (0–1, default 0.5), `site_types` (subset of `["donor","acceptor"]`, default both) |
 | enhancer | *(none)* |
 | chromatin | `threshold` (0–1, default 0.5) |
-| annotation | `batch_size` (1–128, default 8), `shift_coordinates`, `reverse_complement` (default true) |
+| annotation | `shift_coordinates`, `reverse_complement` (default true) |
 | expression | `description` — **required**, and the only key |
 
 `Prefer: respond-async` is a declared header on **all six** predict operations

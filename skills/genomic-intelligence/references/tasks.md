@@ -57,9 +57,9 @@ unknown key is a hard `422` (`type: "extra_forbidden"`), never ignored:
 | splice | `threshold` (0–1, default 0.5), `site_types` (subset of `["donor","acceptor"]`, default both) |
 | enhancer | *(none)* |
 | chromatin | `threshold` (0–1, default 0.5) |
-| annotation | `batch_size` (1–128, default 8), `shift_coordinates`, `reverse_complement` (default true) |
+| annotation | `shift_coordinates`, `reverse_complement` (default true) |
 | expression | `description` — **required**, and the only key |
-| composite | `description`, `annotation_model`, `expression_model`, `batch_size`, `shift_coordinates` |
+| composite | `description`, `annotation_model`, `expression_model`, `shift_coordinates` |
 
 Per-task output `format` values (an unsupported one is `415 unsupported_format`,
 never a silent fallback to JSON; text formats are synchronous-only): promoter
@@ -168,7 +168,7 @@ Over REST it is a single published operation:
 runtime rather than marked `required` in `FindGenesAndPredictExpressionOptions`,
 so a missing or empty value is `422 validation_failed`, *"options.description is
 required (cell type / assay context)"*). Optional: `annotation_model`,
-`expression_model`, `batch_size` (1–128, default 8), `shift_coordinates`.
+`expression_model`, `shift_coordinates`.
 
 Per discovered gene it cuts as much flank around the TSS as the expression
 stage can use, limited by what the submitted sequence holds, in the gene's own
