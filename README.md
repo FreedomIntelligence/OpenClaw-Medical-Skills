@@ -5,13 +5,13 @@
 [![GitHub Stars](https://img.shields.io/github/stars/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github&color=gold)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github&color=blue)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/network/members)
 [![GitHub Issues](https://img.shields.io/github/issues/FreedomIntelligence/OpenClaw-Medical-Skills?style=for-the-badge&logo=github)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/issues)
-[![Skills Count](https://img.shields.io/badge/Skills-869-brightgreen?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/tree/main/skills)
+[![Skills Count](https://img.shields.io/badge/Skills-870-brightgreen?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0tMiAxNWwtNS01IDEuNDEtMS40MUwxMCAxNC4xN2w3LjU5LTcuNTlMMTkgOGwtOSA5eiIvPjwvc3ZnPg==)](https://github.com/FreedomIntelligence/OpenClaw-Medical-Skills/tree/main/skills)
 [![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-OpenClaw%20%7C%20NanoClaw-orange?style=for-the-badge)](https://github.com/openclaw/openclaw)
 
 **The largest open-source medical AI skill library for OpenClaw.**
 
-*869 curated skills · Clinical · Genomics · Drug Discovery · Bioinformatics · Medical Devices*
+*870 curated skills · Clinical · Genomics · Drug Discovery · Bioinformatics · Medical Devices*
 
 [English](#) | [中文](README_zh.md)
 
@@ -21,7 +21,7 @@
 
 ## What Is This?
 
-**OpenClaw Medical Skills** is a curated collection of **869 AI agent skills** covering the full spectrum of biomedical and clinical research. These skills are designed for [OpenClaw](https://github.com/openclaw/openclaw) / [NanoClaw](https://github.com/qwibitai/nanoclaw) — Claude-based personal AI assistant frameworks — and transform a general-purpose AI agent into a powerful medical and scientific research companion.
+**OpenClaw Medical Skills** is a curated collection of **870 AI agent skills** covering the full spectrum of biomedical and clinical research. These skills are designed for [OpenClaw](https://github.com/openclaw/openclaw) / [NanoClaw](https://github.com/qwibitai/nanoclaw) — Claude-based personal AI assistant frameworks — and transform a general-purpose AI agent into a powerful medical and scientific research companion.
 
 Each skill is a self-contained module (a `SKILL.md` file) that:
 - Teaches the agent specialized domain knowledge and workflows
@@ -166,13 +166,13 @@ Your agent should list the installed skills with their capabilities.
 |---|---|---|
 | General & Core | 10 | Browser/search, document tools, and developer workflow utilities |
 | Medical & Clinical | 119 | Clinical reports, CDS, oncology, imaging, and healthcare AI |
-| Scientific Databases | 43 | Genomics/protein/drug databases and biomedical knowledge retrieval |
+| Scientific Databases | 44 | Genomics/protein/drug databases and biomedical knowledge retrieval |
 | Bioinformatics (gptomics) | 239 | Variant analysis, sequencing QC, DE, pathways, single-cell, and epigenomics |
 | Omics & Computational Biology | 59 | Single-cell/spatial, proteomics, cheminformatics, and protein design tools |
 | ClawBio Pipelines | 21 | Orchestration pipelines for scRNA, GWAS, ancestry, and structural workflows |
 | BioOS Extended Suite | 285 | Extended agent suite for oncology, immunology, clinical AI, and infrastructure |
 | Data Science & Tools | 93 | Statistics, visualization, automation, simulation, and scientific tooling |
-| **Total** | **869** | |
+| **Total** | **870** | |
 
 ---
 
@@ -493,6 +493,7 @@ Your agent should list the installed skills with their capabilities.
 | [cosmic-database](skills/cosmic-database/) | Access COSMIC cancer mutation database. Query somatic mutations, Cancer Gene Census, mutational signatures, gene fusions, for cancer research and precision oncology. Requires authentication. |
 | [ensembl-database](skills/ensembl-database/) | Query Ensembl genome database REST API for 250+ species. Gene lookups, sequence retrieval, variant analysis, comparative genomics, orthologs, VEP predictions, for genomic research. |
 | [gene-database](skills/gene-database/) | Query NCBI Gene via E-utilities/Datasets API. Search by symbol/ID, retrieve gene info (RefSeqs, GO, locations, phenotypes), batch lookups, for gene annotation and functional analysis. |
+| [genomic-intelligence](skills/genomic-intelligence/) | Predict regulatory features, gene structure, and expression directly from DNA sequence with Genomic Intelligence's hosted transformer DNA models (no local GPU). Six tasks over a REST API and a keyless MCP server: promoter regions, splice sites, enhancer activity, chromatin state, expression (log TPM), and de-novo gene annotation. |
 | [geo-database](skills/geo-database/) | Access NCBI GEO for gene expression/genomics data. Search/download microarray and RNA-seq datasets (GSE, GSM, GPL), retrieve SOFT/Matrix files, for transcriptomics and expression analysis. |
 | [ena-database](skills/ena-database/) | Access European Nucleotide Archive via API/FTP. Retrieve DNA/RNA sequences, raw reads (FASTQ), genome assemblies by accession, for genomics and bioinformatics pipelines. |
 | [gget](skills/gget/) | CLI/Python toolkit for rapid bioinformatics queries with access to 20+ databases: Ensembl, UniProt, AlphaFold, ARCHS4, Enrichr, OpenTargets, COSMIC, BLAST, and more. |
