@@ -26,7 +26,7 @@ Source of truth for bounds: the live OpenAPI at
 | splice | sync | 100–500,000 bp | 15,000 bp | BigBird (long-context) |
 | enhancer | sync | 50–500,000 bp | 249 bp | DeepSTARR — ***Drosophila*** |
 | chromatin | sync | 200–500,000 bp | 1,000 bp | DeepSEA — hundreds of tracks |
-| expression | sync | **9,198–500,000 bp** (scores one 9,198 bp window) | n/a (`trained_window_bp` 9,198) | log(TPM+1) |
+| expression | sync | **9,198–500,000 bp**, TSS at least 4,599 bp from each end | n/a (see `recommended_flank_bp`) | log(TPM+1) |
 | annotation | async | 1,000–500,000 bp | n/a | de-novo transcripts |
 
 `Recommended mode` is guidance, not a constraint — every task accepts both. Omit `Prefer` for a synchronous `200`; send `Prefer: respond-async` for a `202` plus `GET /v1/tasks/jobs/{job_id}`. Only the composite workflow enforces a mode, rejecting sync above 50,000 bp with `413 sync_too_large`.
@@ -104,16 +104,20 @@ binding). The default (DeepSEA) covers hundreds of features.
 `data`.
 
 ## expression
-Expression as **log(TPM+1)** from a fixed window. Its operation is
+Expression as **log(TPM+1)** from the sequence around a TSS. Its operation is
 `POST /v1/tasks/expression/predict`, schema `ExpressionPredictRequest` — alone
 among the six it requires `options` as well as `sequence`. Body:
 `{sequence, options, tss_index?, sequence_name?, model?}`, closed to unknown
 fields. Three enforced requirements, each a `422` when violated:
 
-1. **9,198–500,000 bp.** The model scores exactly one 9,198 bp window
-   **centred on the TSS** — `sequence[tss_index-4599 : tss_index+4599]` — but
-   the endpoint accepts up to 500 kb and slices for you. Below 9,198 bp is
-   rejected; nothing is padded or truncated.
+1. **9,198–500,000 bp, with the TSS at least 4,599 bp from each end.** That
+   is the floor every expression model accepts, not a target. The server cuts
+   the selected model's slice around `tss_index` and ignores what lies beyond
+   it; how far a model reads differs (a long-context model reads far more than
+   4,599 bp each side). Each model's `bio_spec.recommended_flank_bp` says how
+   much to fetch on each side, and sending less is scored but drifts. Below the
+   floor is rejected; nothing is padded. See `sequence-acquisition.md` for the
+   recipe: F from the model list, TSS at offset F, `tss_index = F`.
 2. **`tss_index`** — 0-based TSS offset into the **whitespace-stripped**
    sequence. Required unless the sequence is exactly 9,198 bp (where it defaults
    to 4,599, the only legal value). Bounds:
@@ -129,10 +133,11 @@ stripped string, not on file characters.
 
 Result: `data.prediction.expression_log_tpm` (and `expression_tpm`).
 `meta.task_specific_counts` carries `tss_index` and `scored_window`
-(`[start, end]`, always 9,198 wide) — assert on it, because an in-range but
-wrong `tss_index` scores the wrong window with a `200`. `data.input` echoes
-`tss_index`, `scored_window`, and `submitted_sequence_length`; the length you
-submitted is `meta.sequence_length`, and the scored width is always 9,198.
+(`[start, end]`, the slice of your submission the model used; its width
+differs by model) — assert on it, because an in-range but wrong `tss_index`
+scores the wrong window with a `200`. `data.input` echoes `tss_index`,
+`scored_window`, and `submitted_sequence_length`; the length you submitted is
+`meta.sequence_length`.
 
 Both `tss_index` failures come from a whole-model validator and so report at
 `loc: ["body"]`, **never** `body.tss_index`. Match on
@@ -153,8 +158,8 @@ returns `200`. `data.transcripts` lists each transcript with `name`, `start`,
 not a region** (acquire one with `fetch_region` first); `description` is
 required. It finds genes in the sequence
 and returns an expression prediction per gene. The composite does its own gene
-finding and windowing, so it has **no** 9,198 bp floor and takes **no**
-`tss_index`.
+finding and windowing, so it has **no** expression floor of its own and
+takes **no** `tss_index`.
 
 Over REST it is a single published operation:
 `POST /v1/workflows/find-genes-and-predict-expression`, request
@@ -165,9 +170,12 @@ so a missing or empty value is `422 validation_failed`, *"options.description is
 required (cell type / assay context)"*). Optional: `annotation_model`,
 `expression_model`, `batch_size` (1–128, default 8), `shift_coordinates`.
 
-It cuts a TSS-centred 9,198 bp window per discovered gene, padding with `N` up to
-half the window rather than dropping an edge gene — the direct expression route
-refuses to pad at all. `meta.task_specific_counts` =
+Per discovered gene it cuts as much flank around the TSS as the expression
+stage can use, limited by what the submitted sequence holds, in the gene's own
+orientation; near an edge the window is shorter on that side (padded with `N`
+where the stage needs a fixed width) rather than dropping the gene. The direct
+expression route refuses to pad at all. Longer regions around the genes give
+better predictions. `meta.task_specific_counts` =
 `{genes_found, genes_predicted, genes_skipped}` with
 `genes_predicted + genes_skipped == genes_found`; per-gene causes in
 `data.expression_predictions[].skip_reason`.

@@ -24,7 +24,7 @@ Acquire a **sequence handle** (`sequence_ref`), then predict against it.
 |---|---|---|
 | `fetch_ensembl_sequence` | `gene` | Gene **symbol or Ensembl ID** (e.g. `"TP53"`). Also `species`, `flank_bp`. Not for coordinates. |
 | `fetch_region` | `region` | Coordinate range, e.g. `"chr8:127,680,000-127,800,000"`. Also `species`, `strand`, `flank_bp`. Plus strand by default, which is what gene finding expects. |
-| `fetch_gene_for_expression` | `gene` | Builds the **TSS-centred 9,198 bp** window `expression` needs. Also `species`. |
+| `fetch_gene_for_expression` | `gene` | Builds the **TSS-centred, gene-sense** sequence `expression` needs, with as much flank as `list_models` recommends; the handle records `tss_index`. Also `species`. |
 | `load_demo_sequence` | `name` | **`name` is required.** Valid names: `promoter_tp53`, `splice_hbb`, `enhancer_eve`, `chromatin_active_promoter_chr19`, `expression_hbb_k562`, `annotation_hbb_chr11`. |
 | `store_inline_sequence` | `sequence` | Store an inline string; optional `name`. |
 
@@ -56,8 +56,8 @@ returns `{data: {job_id, status}}` to poll with `get_job(job_id)`.
 **required** `description`. It has **no `region` parameter** — acquire a handle
 with `fetch_region` first. It finds genes in the sequence, then predicts
 expression off each discovered TSS. Use it whenever you want expression for a
-whole region: `predict_expression` cannot run on one, because it needs a single
-per-gene 9,198 bp window.
+whole region: `predict_expression` cannot run on one, because it scores one TSS
+per call.
 
 ## Jobs and discovery
 

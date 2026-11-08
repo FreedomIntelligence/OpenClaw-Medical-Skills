@@ -78,11 +78,16 @@ length — under the floor *or* over 500,000 bp; over-length is not a `413`).
   expression. Promoter 2,000 (the 300 bp promoter models 300), splice 15,000,
   enhancer 249, chromatin 1,000. Compare your sequence length against this to
   know whether the model scored real sequence or padding.
-- `trained_window_bp` — fixed receptive field; 9,198 for the expression model,
-  `null` for sliding-window models.
+- `trained_window_bp` — the fixed slice cut around `tss_index` for an
+  expression model that has one; `null` for sliding-window models and for
+  expression models that read a variable span around the TSS.
+- `recommended_flank_bp` — expression only: bp of gene-sense sequence to fetch
+  on **each** side of the TSS for that model, TSS at offset F, `tss_index = F`.
+  Read it at call time and take the largest across the listed models; never
+  pin it (see `sequence-acquisition.md`).
 - The legacy `max_seq_length_bp` is not part of `bio_spec` and is absent from the
-  response. It was ambiguous — it read 9,198 for the expression model, the trained
-  window rather than a request cap, so gating on it wrongly rejected the
+  response. It was ambiguous — it read 9,198 for the original expression model, the
+  trained window rather than a request cap, so gating on it wrongly rejected the
   9,198–500,000 bp range expression accepts. Use `request_max_bp`.
 
 There is no `strand_sensitive` flag. The splice model is strand-specific in

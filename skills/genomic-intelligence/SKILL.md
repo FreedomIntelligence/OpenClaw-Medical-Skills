@@ -86,7 +86,7 @@ options?}`, returning a `{data, meta}` envelope. What differs per task:
 | `splice` | sync | 100–500,000 bp | 15,000 bp | donor/acceptor sites (long-context BigBird); strand-specific — feed transcript orientation |
 | `enhancer` | sync | 50–500,000 bp | 249 bp | dev + housekeeping scores (DeepSTARR, *Drosophila*) |
 | `chromatin` | sync | 200–500,000 bp | 1,000 bp | hundreds of tracks (DeepSEA) |
-| `expression` | sync | **9,198–500,000 bp** | n/a (`trained_window_bp` 9,198) | log(TPM+1); needs `tss_index` unless exactly 9,198 bp, plus a cell-type `description` |
+| `expression` | sync | **9,198–500,000 bp**, TSS at least 4,599 bp from each end | n/a (see `recommended_flank_bp`) | log(TPM+1); needs `tss_index` unless the sequence is exactly 9,198 bp, plus a cell-type `description` |
 | `annotation` | async | 1,000–500,000 bp | n/a | de-novo transcripts; submit + poll |
 
 `Recommended mode` is guidance, not a constraint — every task accepts both. Omit `Prefer` for a synchronous `200`; send `Prefer: respond-async` for a `202` plus `GET /v1/tasks/jobs/{job_id}`. Only the composite workflow enforces a mode, rejecting sync above 50,000 bp with `413 sync_too_large`.
@@ -134,9 +134,13 @@ in `references/tasks.md`.
 is a `422`, nothing is padded or clamped, and there is no opt-out flag, header,
 or query parameter:
 
-- **It always scores exactly one 9,198 bp TSS-centred window** —
-  `sequence[tss_index-4599 : tss_index+4599]`. The endpoint itself accepts
-  **9,198–500,000 bp**; anything below 9,198 bp is rejected outright.
+- **It reads the sequence around the TSS, and how far depends on the model.**
+  The endpoint accepts **9,198–500,000 bp** with the TSS at least 4,599 bp from
+  each end; anything below that floor is rejected outright. The floor is not a
+  target: a long-context model reads much further than 4,599 bp each side, and
+  is scored on less than it was trained on if you send only the floor. Each
+  model's `bio_spec.recommended_flank_bp` says how much to fetch on each side
+  (see *Sequence acquisition* below).
 - **`tss_index` is required unless the sequence is exactly 9,198 bp.** It is the
   0-based TSS offset into the **whitespace-stripped** sequence, bounded by
   `4599 ≤ tss_index ≤ len(sequence) − 4599`. At exactly 9,198 bp it defaults to
@@ -154,9 +158,10 @@ or query parameter:
 > confident `200` for the wrong window. Assert on
 > `meta.task_specific_counts.scored_window` / `.tss_index` in the response.
 > The length you submitted is `meta.sequence_length` (also echoed as
-> `data.input.submitted_sequence_length`); the scored width is always 9,198,
-> i.e. `scored_window[1] - scored_window[0]`. (`data.input.sequence_length`
-> was removed at contract revision 13.)
+> `data.input.submitted_sequence_length`); the width the model read is
+> `scored_window[1] - scored_window[0]`. It differs by model and shows how
+> much of your flank was used.
+> (`data.input.sequence_length` was removed at contract revision 13.)
 >
 > Both `tss_index` violations — "required unless exactly 9,198 bp" and the range
 > check — come from a whole-model validator, so they report at `loc: ["body"]`,
@@ -165,17 +170,23 @@ or query parameter:
 
 ## Sequence acquisition
 
-You rarely start from a raw 9,198 bp string. Acquire sequence first:
+You rarely start from a raw sequence string. Acquire sequence first:
 
 - **From a gene symbol** → MCP `fetch_ensembl_sequence(gene=...)`; **from
   coordinates** → `fetch_region(region=...)`. Both fetch public Ensembl reference
   sequence (no key). REST users can query Ensembl REST directly. (`find_genes` is
   the annotation task, not an acquisition tool.)
-- **For `expression`** → use the TSS-centred fetch so the window is exactly
-  9,198 bp. MCP: `fetch_gene_for_expression` (handles the centring). Otherwise
-  fetch a wider locus and pass the TSS as `tss_index` so the server cuts the
-  window — but compute that offset on the stripped nucleotide string, not on
-  file characters.
+- **For `expression`** → fetch gene-sense sequence centred on the canonical
+  TSS, sized from the model list, and send `tss_index`. MCP:
+  `fetch_gene_for_expression` does all of it and the handle carries the offset.
+  Over REST: read `GET /v1/tasks/expression/models` (public), take
+  **F = the largest `bio_spec.recommended_flank_bp`** among the listed models
+  (never below 4,599, and 2F within `request_max_bp`), fetch F bp before the
+  TSS and F bp from the TSS onward on the gene's strand, and send
+  `tss_index = F`. One fetch then serves every listed model. Never hard-code a
+  flank, a window or a model id: defaults change and longer-context models
+  arrive. Count offsets on the stripped nucleotide string, not on file
+  characters.
 - **From a local FASTA** → MCP `store_inline_sequence`, or read the file yourself
   for REST. (`load_local_fasta` exists only in local deployments, not on the
   hosted server.)
@@ -213,16 +224,32 @@ def predict(task, sequence, sequence_name, model=None, options=None, tss_index=N
 out = predict("promoter", seq, "TP53_region")
 print(out["data"]["summary"])
 
-# Expression — a pre-cut 9,198 bp TSS-centred window (tss_index defaults to 4,599):
-out = predict("expression", tss_window_9198bp, "HBB",
-              options={"description": "K562 cells"})
-print(out["data"]["prediction"]["expression_log_tpm"])
+# Expression — size the flank from the model list, never from a constant.
+listing = requests.get(f"{BASE}/v1/tasks/expression/models").json()   # public, no key
+specs = [m.get("bio_spec") or {} for m in listing["models"]]
+F = max([s.get("recommended_flank_bp") or 0 for s in specs] + [4599])
+F = min(F, min(s.get("request_max_bp") or 500_000 for s in specs) // 2)
+model = listing["default_model"]   # or the model the user named; reuse it all run
 
-# Expression — a whole locus; the server slices ±4,599 bp around the TSS you name.
-# tss_index is 0-based into the whitespace-stripped sequence.
-out = predict("expression", locus_seq, "HBB",
-              options={"description": "K562 cells"}, tss_index=tss_offset_in_locus)
-print(out["meta"]["task_specific_counts"]["scored_window"])   # confirm the window scored
+# Gene-sense sequence with the canonical TSS at offset F (Ensembl, no key).
+# Plus strand: [tss - F, tss + F). Minus strand: (tss - F, tss + F], which
+# Ensembl reverse-complements for strand=-1. 1-based inclusive coordinates:
+ENS = "https://rest.ensembl.org"
+g = requests.get(f"{ENS}/lookup/symbol/homo_sapiens/HBB?expand=1",
+                 headers={"Content-Type": "application/json"}).json()
+tx = next(t for t in g["Transcript"] if t.get("is_canonical"))
+if tx["strand"] == 1:
+    tss = tx["start"]; lo, hi = tss - F, tss + F - 1
+else:
+    tss = tx["end"];   lo, hi = tss - F + 1, tss + F
+seq = requests.get(f"{ENS}/sequence/region/human/{tx['seq_region_name']}:{lo}..{hi}:{tx['strand']}",
+                   headers={"Content-Type": "text/plain"}).text.strip()
+assert len(seq) == 2 * F
+
+out = predict("expression", seq, "HBB", model=model,
+              options={"description": "K562 cells"}, tss_index=F)
+print(out["data"]["prediction"]["expression_log_tpm"])
+print(out["meta"]["task_specific_counts"]["scored_window"])   # the slice the model read
 ```
 
 ### Async (any task)
@@ -262,7 +289,7 @@ the context:
 load_demo_sequence(name="promoter_tp53")  # keyless smoke test; name is required
 fetch_ensembl_sequence(gene="TP53")       # gene symbol or Ensembl ID -> handle
 fetch_region(region="chr11:5,225,000-5,235,000")   # coordinates -> handle
-fetch_gene_for_expression(gene="HBB")     # TSS-centred 9,198 bp handle for expression
+fetch_gene_for_expression(gene="HBB")     # TSS-centred, flank sized from list_models
 
 # 2. Predict against the handle:
 predict_promoter(sequence_ref=<ref>)
@@ -290,9 +317,12 @@ composite:
 - **REST:** one call — `POST /v1/workflows/find-genes-and-predict-expression`,
   body `{sequence, options}` with `sequence` 1,000–500,000 bp and
   `options.description` (cell type / assay) required; a missing or empty
-  description is a `422 validation_failed`. It annotates, centres a 9,198 bp
-  window on each discovered gene's TSS (padding with `N` up to half the window
-  rather than dropping an edge gene), and returns a prediction per gene.
+  description is a `422 validation_failed`. It annotates, cuts as much flank
+  around each discovered gene's TSS as the expression stage can use and the
+  submitted sequence holds (in the gene's own orientation, shorter or
+  `N`-padded near an edge rather than dropping the gene), and returns a
+  prediction per gene. Longer regions around the genes give better
+  predictions.
   `meta.task_specific_counts` = `{genes_found, genes_predicted, genes_skipped}`
   with `genes_predicted + genes_skipped == genes_found`; per-gene causes in
   `data.expression_predictions[].skip_reason`. Above **50,000 bp** it forces
@@ -346,4 +376,5 @@ Every response carries `RateLimit-Limit`, `RateLimit-Remaining`,
 - `references/mcp.md` — the hosted MCP tool list, the handle-based flow, and the
   `gi://` resources.
 - `references/sequence-acquisition.md` — Ensembl fetch calls and the
-  expression-window (9,198 bp, TSS-centred) math, including `tss_index`.
+  expression flank math (F from the model list, TSS at offset F), including
+  `tss_index`.
